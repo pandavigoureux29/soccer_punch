@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class ScoreComponent : MonoBehaviour
 {
-    public Text ScoreText;
+    public Text ScoreTextTeam1;
+    public Text ScoreTextTeam2;
 
     private Team team1;
     private Team team2;
@@ -16,22 +17,23 @@ public class ScoreComponent : MonoBehaviour
         SetScoreText();
     }
     
-    public void ScoreGoal(string teamId)
+    public void ScoreGoal(string goalTag)
     {
-        if(team1.Id == teamId)
+        if(team1.Id == goalTag)
         {
-            team1.Score++;
+            team2.Score++;
         }
         else
         {
-            team2.Score++;
+            team1.Score++;
         }
         SetScoreText();
     }
 
     public void SetScoreText()
     {
-        ScoreText.text = team1.DisplayName + ": " + team1.Score.ToString() + "\n" + team2.DisplayName + ": " + team2.Score.ToString();
+        ScoreTextTeam1.text = team1.Score.ToString();
+        ScoreTextTeam2.text = team2.Score.ToString();
     }
 }
 
