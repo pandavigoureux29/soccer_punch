@@ -21,7 +21,7 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnEndDrag(PointerEventData _eventData)
     {
-        if( m_spawnManager == null )
+        if( m_spawnManager == null ) 
             m_spawnManager = Component.FindObjectOfType<PlayerSpawnManager>();
 
         var success = m_spawnManager.SpawnPlayer(pitchPlayerPath);

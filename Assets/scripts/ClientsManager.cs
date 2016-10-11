@@ -36,7 +36,7 @@ public class ClientsManager : NetworkBehaviour {
 
     #region Server
     public override void OnStartServer()
-    {
+    { 
         base.OnStartServer();
         NetworkServer.RegisterHandler(MsgType.Connect, OnNewConnection);
     }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class PlayerSpawnManager : NetworkBehaviour {
 
     [SerializeField] Camera secondCamera;
-
+     
     List<Transform> m_teams;
 
     bool isMainTeam = false;
