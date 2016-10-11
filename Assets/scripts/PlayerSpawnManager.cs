@@ -22,15 +22,23 @@ public class PlayerSpawnManager : NetworkBehaviour {
         
     public bool SpawnPlayer(string _pitchPlayerPath)
     {
-        CmdSpawnPlayer(_pitchPlayerPath);
-        return true;
+        var comp = Component.FindObjectOfType<UIDropZone>();
+        bool inDropZone = RectTransformUtility.RectangleContainsScreenPoint(comp.GetComponent<RectTransform>(), Input.mousePosition);
+        if (!inDropZone)
+            return false;
+        var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //Spawn player
+        CmdSpawnPlayer(_pitchPlayerPath, pos.x, pos.y);
+        return false;
     }
 
     [Command]
-    void CmdSpawnPlayer(string _playerPrefab)
+    void CmdSpawnPlayer(string _playerPrefab, float x, float y)
     {
-       var player = Instantiate( Resources.Load("prefabs/players/"+_playerPrefab ) ) as GameObject;
-       NetworkServer.Spawn(player);
+        var player = Instantiate( Resources.Load("prefabs/players/"+_playerPrefab ) ) as GameObject;
+        Utils.SetPositionX(player.transform, x);
+        Utils.SetPositionY(player.transform, y);
+        NetworkServer.Spawn(player);
     }
 
     [ClientRpc]
