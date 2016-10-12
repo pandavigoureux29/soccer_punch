@@ -11,13 +11,13 @@ public class PlayerSpawnManager : NetworkBehaviour {
 
     bool isMainTeam = false;
     
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         m_teams = new List<Transform>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+    
+    // Update is called once per frame
+    void Update () {
     }
         
     public bool SpawnPlayer(string _pitchPlayerPath)
