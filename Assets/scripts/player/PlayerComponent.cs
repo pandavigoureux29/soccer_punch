@@ -2,9 +2,10 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class PlayerComponent : NetworkBehaviour
-{
-    [SerializeField] SpriteRenderer m_renderer;
+public class PlayerComponent : NetworkBehaviour {
+    
+    [SerializeField]
+    SpriteRenderer m_renderer;
 
     public enum PlayerState
     {
@@ -36,7 +37,7 @@ public class PlayerComponent : NetworkBehaviour
         Pass,
         ToEnemy
     }
-    
+
     public PlayerState CurrentState;
     public IdleState CurrentIdleState;
     public EnemyState CurrentEnemyState;
@@ -44,7 +45,7 @@ public class PlayerComponent : NetworkBehaviour
 
     [SyncVar]
     PlayerDataAsset playerData;
-    
+
     void Start()
     {
         CurrentState = PlayerState.Idle;
@@ -55,9 +56,9 @@ public class PlayerComponent : NetworkBehaviour
     {
         base.OnStartClient();
         var spawnManager = Component.FindObjectOfType<PlayerSpawnManager>();
-        if( spawnManager != null )
+        if (spawnManager != null)
         {
-            if( spawnManager.IsMainTeam)
+            if (spawnManager.IsMainTeam)
             {
                 m_renderer.sprite = playerData.imageA;
             }
