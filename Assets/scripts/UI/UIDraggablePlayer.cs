@@ -6,6 +6,10 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     [SerializeField] string pitchPlayerPath;
 
+    [SerializeField] PlayerDataAsset playerData;
+
+    [SerializeField] string image;
+
     PlayerSpawnManager m_spawnManager;
     Vector3 m_initialPosition;
         
