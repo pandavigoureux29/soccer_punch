@@ -29,18 +29,21 @@ public class PlayerSpawnManager : NetworkBehaviour {
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //Spawn player
         
-        CmdSpawnPlayer(_playerData.name, pos.x, pos.y);
+        CmdSpawnPlayer(_playerData.name, pos.x, pos.y, IsMainTeam);
         return true;
     }
 
     [Command]
-    void CmdSpawnPlayer(string _playerDataName, float x, float y)
+    void CmdSpawnPlayer(string _playerDataName, float x, float y, bool _mainTeam)
     {
         PlayerDataAsset data = Instantiate(Resources.Load("data/" + _playerDataName)) as PlayerDataAsset;
         var player = Instantiate( Resources.Load("prefabs/players/"+ data.PrefabPath ) ) as GameObject;
         Utils.SetPositionX(player.transform, x);
         Utils.SetPositionY(player.transform, y);
-        player.GetComponent<PlayerComponent>().PlayerData = data;
+        //Set values
+        var playerComponent = player.GetComponent<PlayerComponent>();
+        playerComponent.PlayerDataName = _playerDataName;
+        playerComponent.IsMainTeam = _mainTeam;
         NetworkServer.Spawn(player);
     }
 
