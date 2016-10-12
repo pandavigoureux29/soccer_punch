@@ -18,4 +18,7 @@ public class PlayerDataAsset : ScriptableObject {
     public Quaternion ActionAngle;
     public float OffensiveStrength;
     public float DefensiveStrength;
+
+    public string imageA;
+    public string imageB;
 }

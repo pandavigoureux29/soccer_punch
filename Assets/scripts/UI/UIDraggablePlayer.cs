@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
@@ -10,9 +11,22 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     [SerializeField] string image;
 
+    [SerializeField] GameObject m_fullImage;
+    [SerializeField] GameObject m_emptyImage;
+
+    [SerializeField] Text m_text;
+
+    bool m_empty = true;
+    float m_time = 0;
+
     PlayerSpawnManager m_spawnManager;
     Vector3 m_initialPosition;
-        
+
+    public void Awake()
+    {
+        Empty();
+    }
+    
     public void OnBeginDrag(PointerEventData _eventData)
     {
         m_initialPosition = transform.localPosition;
@@ -31,12 +45,40 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
         var success = m_spawnManager.SpawnPlayer(pitchPlayerPath);
         if( success)
         {
-            gameObject.SetActive(false);
-            Destroy(gameObject);
+            Empty();
         }
-        else
+        transform.localPosition = m_initialPosition;
+    }
+
+    public void Empty()
+    {
+        m_fullImage.gameObject.SetActive(false);
+        m_emptyImage.gameObject.SetActive(true);
+        m_text.gameObject.SetActive(false);
+        m_empty = true;
+    }
+
+    public void Fill(PlayerDataAsset PlayerData)
+    {
+        m_fullImage.gameObject.SetActive(true);
+        m_emptyImage.gameObject.SetActive(false);
+        m_text.gameObject.SetActive(true);
+        m_empty = false;
+        m_time = 0;
+    }
+
+    public PlayerDataAsset PlayerData
+    {
+        get
         {
-            transform.localPosition = m_initialPosition;
+            return playerData;
+        }
+
+        set
+        {
+            playerData = value;
         }
     }
+
+    public bool IsEmpty { get { return m_empty; } }
 }

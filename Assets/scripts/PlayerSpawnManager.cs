@@ -29,7 +29,7 @@ public class PlayerSpawnManager : NetworkBehaviour {
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         //Spawn player
         CmdSpawnPlayer(_pitchPlayerPath, pos.x, pos.y);
-        return false;
+        return true;
     }
 
     [Command]
