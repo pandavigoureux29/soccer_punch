@@ -25,6 +25,7 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void Awake()
     {
         Empty();
+        
     }
     
     public void OnBeginDrag(PointerEventData _eventData)
@@ -42,7 +43,7 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if( m_spawnManager == null ) 
             m_spawnManager = Component.FindObjectOfType<PlayerSpawnManager>();
 
-        var success = m_spawnManager.SpawnPlayer(pitchPlayerPath);
+        var success = m_spawnManager.SpawnPlayer(playerData);
         if( success)
         {
             Empty();

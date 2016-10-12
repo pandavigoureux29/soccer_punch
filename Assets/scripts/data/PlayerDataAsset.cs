@@ -19,9 +19,9 @@ public class PlayerDataAsset : ScriptableObject {
     public Quaternion ActionAngle;
     public float OffensiveStrength;
     public float DefensiveStrength;
-
-    public string imageA;
-    public string imageB;
+    
+    public Sprite imageA;
+    public Sprite imageB;
 
     //State Machine Preferences
     public StatePreference PreferredIdleState = new StatePreference(typeof(PlayerStateMachineComponent.IdleState));
