@@ -1,23 +1,22 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 
-public class GoalComponent : MonoBehaviour {
+public class GoalComponent : NetworkBehaviour {
 
-    //private GameObject ball;
-    private ScoreComponent scoreComponent;
+    [SerializeField] bool mainTeam;
 
     void Start()
     {
-        scoreComponent = FindObjectOfType<ScoreComponent>();
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "Ball")
+        if (isServer)
         {
-            if (scoreComponent == null)
-                return;
-
-            scoreComponent.ScoreGoal(gameObject.tag);            
+            if (col.gameObject.tag == "Ball")
+            {
+                FindObjectOfType<GameManager>().AddScore(!mainTeam);
+            }
         }
     }
 }

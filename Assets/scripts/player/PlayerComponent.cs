@@ -1,61 +1,92 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
+using System.Collections.Generic;
 
-public class PlayerComponent : MonoBehaviour
-{
-    public enum PlayerState
+public class PlayerComponent : NetworkBehaviour {
+    
+    [SerializeField]
+    SpriteRenderer m_renderer;
+    
+    [SyncVar]
+    protected string playerDataName;
+    [SyncVar]
+    private bool mainTeam;
+
+    [SyncVar]
+    public float CurrentHealth;
+
+    PlayerStateMachineComponent playerStateMachine;
+
+    protected PlayerDataAsset m_playerData;
+    
+    public override void OnStartClient()
     {
-        Idle = 0,
-        Ball,
-        Enemy,
-        Kick,
-        Dead
+        base.OnStartClient();
+        var spawnManager = new List<PlayerSpawnManager>(Component.FindObjectsOfType<PlayerSpawnManager>()) {}.Find(x=>x.isLocalPlayer);
+        if (spawnManager != null)
+        {
+            m_playerData = Instantiate(Resources.Load("data/" + playerDataName)) as PlayerDataAsset;
+            //if the same team
+            if ( spawnManager.IsMainTeam == IsMainTeam )
+            {
+                m_renderer.sprite = m_playerData.imageA;
+            }
+            else
+            {
+                m_renderer.sprite = m_playerData.imageB;
+            }
+            CurrentHealth = m_playerData.MaxLife;
+            playerStateMachine = GetComponent<PlayerStateMachineComponent>();
+        }
     }
 
-    public enum IdleState
+    void Update()
     {
-        Static = 0,
-        Patrolling,
-        Running,
-        BallAware,
-        EnemyAware
+        TakeDamage(m_playerData.LifeCost);
     }
 
-    public enum EnemyState
+    public string PlayerDataName
     {
-        Fight = 0,
-        Evade
+        get
+        {
+            return playerDataName;
+        }
+
+        set
+        {
+            playerDataName = value;
+        }
     }
 
-    public enum KickState
+    public PlayerDataAsset PlayerData
     {
-        ToGoal = 0,
-        Pass,
-        ToEnemy
+        get
+        {
+            return m_playerData;
+        }
+        
     }
 
-    public string PrefabPath;
-    public float Cooldown;
-    public float MaxLife;
-    public float LifeCost;
-    public float Speed;
-    public float TravelDistance;
-    public float ActionRadius;
-    public Time AwarenessDuration;
-    public float KickSpeed;
-    public float KickPrecision;
-    public float BallCatchThreshold;
-    public Quaternion ActionAngle;
-    public float OffensiveStrength;
-    public float DefensiveStrength;
-    public PlayerState CurrentState;
-    public IdleState CurrentIdleState;
-    public EnemyState CurrentEnemyState;
-    public KickState CurrentKickState;
-
-    void Start()
+    public bool IsMainTeam
     {
-        CurrentState = PlayerState.Idle;
-        CurrentIdleState = IdleState.Static;
+        get
+        {
+            return mainTeam;
+        }
+
+        set
+        {
+            mainTeam = value;
+        }
+    }
+
+    public void TakeDamage(float damageAmount)
+    {
+        CurrentHealth -= damageAmount;
+        if (CurrentHealth <= 0f)
+        {
+            playerStateMachine.OnDead();
+        }
     }
 }
