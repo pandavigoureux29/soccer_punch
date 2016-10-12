@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class PlayerDataAsset : ScriptableObject {
 
     public string PrefabPath;
+    public string Name;
     public float Cooldown;
     public float MaxLife;
     public float LifeCost;

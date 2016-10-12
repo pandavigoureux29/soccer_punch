@@ -26,7 +26,7 @@ public class PlayerSpawnManager : NetworkBehaviour {
         if (!inDropZone)
             return false;
         //Spawn player
-        CmdSpawnPlayer(_playerData.name, pos.x, pos.y, IsMainTeam);
+        CmdSpawnPlayer(_playerData.Name, pos.x, pos.y, IsMainTeam);
         return true;
     }
 

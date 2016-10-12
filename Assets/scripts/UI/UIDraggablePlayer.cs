@@ -89,6 +89,7 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
         m_text.gameObject.SetActive(true);
         m_empty = false;
         m_time = _playerData.Cooldown;
+        playerData = _playerData;
         Deactivate();
     }
 
