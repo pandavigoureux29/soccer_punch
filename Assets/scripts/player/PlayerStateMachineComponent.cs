@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.Networking;
 
-public class PlayerStateMachineComponent : MonoBehaviour
+public class PlayerStateMachineComponent : NetworkBehaviour
 {
     private PlayerDataAsset playerData;
     private PlayerComponent playerComp;
@@ -62,12 +63,13 @@ public class PlayerStateMachineComponent : MonoBehaviour
     public KickState CurrentKickState;
     public DeadState CurrentDeadState;
 
-    void Start()
+    public override void OnStartServer()
     {
+        base.OnStartServer();
         CurrentState = PlayerState.JustSpawned;
-        playerComp = gameObject.GetComponent<PlayerComponent>();        
+        playerComp = gameObject.GetComponent<PlayerComponent>();
     }
-
+    
     void Update()
     {
         switch (CurrentState)
@@ -191,7 +193,7 @@ public class PlayerStateMachineComponent : MonoBehaviour
         switch (CurrentDeadState)
         {
             case DeadState.Fade:
-                Destroy(gameObject);
+                //Destroy(gameObject);
                 break;
             case DeadState.Explode:
                 break;
@@ -206,7 +208,7 @@ public class PlayerStateMachineComponent : MonoBehaviour
 
     #region EVENTS HANDLERS
 
-    private void onDead()
+    public void OnDead()
     {
         CurrentState = PlayerState.Dead;
     }

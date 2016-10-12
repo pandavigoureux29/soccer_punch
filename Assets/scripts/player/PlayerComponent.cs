@@ -13,6 +13,11 @@ public class PlayerComponent : NetworkBehaviour {
     [SyncVar]
     private bool mainTeam;
 
+    [SyncVar]
+    public float CurrentHealth;
+
+    PlayerStateMachineComponent playerStateMachine;
+
     protected PlayerDataAsset m_playerData;
     
     public override void OnStartClient()
@@ -31,9 +36,15 @@ public class PlayerComponent : NetworkBehaviour {
             {
                 m_renderer.sprite = m_playerData.imageB;
             }
+            CurrentHealth = m_playerData.MaxLife;
+            playerStateMachine = GetComponent<PlayerStateMachineComponent>();
         }
     }
 
+    void Update()
+    {
+        TakeDamage(m_playerData.LifeCost);
+    }
 
     public string PlayerDataName
     {
@@ -67,6 +78,15 @@ public class PlayerComponent : NetworkBehaviour {
         set
         {
             mainTeam = value;
+        }
+    }
+
+    public void TakeDamage(float damageAmount)
+    {
+        CurrentHealth -= damageAmount;
+        if (CurrentHealth <= 0f)
+        {
+            playerStateMachine.OnDead();
         }
     }
 }

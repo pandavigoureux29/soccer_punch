@@ -44,6 +44,7 @@ public class PlayerSpawnManager : NetworkBehaviour {
         NetworkServer.Spawn(player);
         //Add to game manager
         FindObjectOfType<GameManager>().AddPlayer(playerComponent);
+        player.transform.SetParent(transform, false);
     }
 
     [ClientRpc]
