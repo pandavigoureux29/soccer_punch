@@ -1,10 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class PlayerStateMachineComponent : MonoBehaviour
 {
     private PlayerDataAsset playerData;
     private PlayerComponent playerComp;
+    public event Action<GameObject> BallAwareEvent;
+    public event Action<GameObject> BallCaughtEvent;
+    public event Action<GameObject> EnemyAwareEvent;
+    public event Action DeadEvent;
 
     public enum PlayerState
     {
@@ -61,7 +66,13 @@ public class PlayerStateMachineComponent : MonoBehaviour
     {
         CurrentState = PlayerState.JustSpawned;
         playerComp = gameObject.GetComponent<PlayerComponent>();
-        playerData = playerComp.PlayerData;
+
+        //To Remove
+        playerData = new PlayerDataAsset();
+        //playerData = playerComp.PlayerData;
+        //
+
+
     }
 
     void Update()
@@ -93,6 +104,34 @@ public class PlayerStateMachineComponent : MonoBehaviour
 
     public void HandleJustSpawnedState()
     {
+        initStates();
+    }
+
+    private void initStates()
+    {
+        var preference = playerData.PreferredPlayerState;
+        var states = preference.GetSortedStates();
+        CurrentState = ParseEnum<PlayerState>(states[0]);
+
+        preference = playerData.PreferredIdleState;
+        states = preference.GetSortedStates();
+        CurrentIdleState = ParseEnum<IdleState>(states[0]);
+
+        preference = playerData.PreferredBallState;
+        states = preference.GetSortedStates();
+        CurrentBallState = ParseEnum<BallState>(states[0]);
+
+        preference = playerData.PreferredEnemyState;
+        states = preference.GetSortedStates();
+        CurrentEnemyState = ParseEnum<EnemyState>(states[0]);
+
+        preference = playerData.PreferredKickState;
+        states = preference.GetSortedStates();
+        CurrentKickState = ParseEnum<KickState>(states[0]);
+
+        preference = playerData.PreferredDeadState;
+        states = preference.GetSortedStates();
+        CurrentDeadState = ParseEnum<DeadState>(states[0]);
     }
 
     public void HandleIdleState()
@@ -167,4 +206,19 @@ public class PlayerStateMachineComponent : MonoBehaviour
                 return;
         }
     }
+    public static T ParseEnum<T>(string value)
+    {
+        return (T)Enum.Parse(typeof(T), value, true);
+    }
+
+    #region EVENTS HANDLERS
+
+    private void onDead()
+    {
+        CurrentState = PlayerState.Dead;
+    }
+
+
+
+    #endregion
 }

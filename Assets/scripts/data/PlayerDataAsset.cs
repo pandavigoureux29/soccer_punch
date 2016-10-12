@@ -64,5 +64,25 @@ public class StatePreference
                 StatesNames = statesNames;
             }
         }
-    }    
+    }
+    
+    public List<string> GetSortedStates()
+    {
+        List<string> result = new List<string>();
+
+        for (int i = 0; i < StatesNames.Count; i++)
+        {
+            result.Add(null);
+        }
+        for (int i = 0; i < StatesNames.Count; i++)
+        {
+            int nameIndex = (int)PreferencesStrength[i] - 1;
+            if (nameIndex >= 0)
+            {
+                result.Insert(nameIndex, StatesNames[i]);
+            }
+        }
+        result.RemoveAll(item => item == null || item == "JustSpawned");
+        return result;
+    }   
 }
