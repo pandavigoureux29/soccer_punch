@@ -24,6 +24,7 @@ public class PlayerDataAsset : ScriptableObject {
     public Sprite imageB;
 
     //State Machine Preferences
+    public StatePreference PreferredPlayerState = new StatePreference(typeof(PlayerStateMachineComponent.PlayerState));
     public StatePreference PreferredIdleState = new StatePreference(typeof(PlayerStateMachineComponent.IdleState));
     public StatePreference PreferredBallState = new StatePreference(typeof(PlayerStateMachineComponent.BallState));
     public StatePreference PreferredEnemyState = new StatePreference(typeof(PlayerStateMachineComponent.EnemyState));
@@ -31,30 +32,17 @@ public class PlayerDataAsset : ScriptableObject {
     public StatePreference PreferredDeadState = new StatePreference(typeof(PlayerStateMachineComponent.DeadState));
 }
 
-//public class StatePreference
-//{
-//    public int PreferredState;
-//    public float PreferenceStrength;
-
-//    public StatePreference(int preferredState, float preferenceStrength = 100)
-//    {
-//        PreferredState = preferredState;
-//        PreferenceStrength = preferenceStrength;
-//    }
-
-//    public StatePreference()
-//    {
-//        PreferredState = 0;
-//        PreferenceStrength = 100f;
-//    }
-//}
-
+[System.Serializable]
 public class StatePreference
 {
+    [SerializeField]
     public Type RelatedStateEnum;
+    [SerializeField]
     public List<float> PreferencesStrength;
+    [SerializeField]
+    public List<string> StatesNames;
 
-    public StatePreference(Type enumType, List<float> preferencesStrength = null)
+    public StatePreference(Type enumType, List<float> preferencesStrength = null, List<string> statesNames = null)
     {
         if (enumType.IsEnum)
         {
@@ -62,15 +50,18 @@ public class StatePreference
             if (preferencesStrength == null)
             {
                 PreferencesStrength = new List<float>();
+                StatesNames = new List<string>();
                 var listLength = Enum.GetNames(enumType).Length;
                 for (int i = 0; i < listLength; ++i)
                 {
-                    PreferencesStrength.Add(1f / listLength);
+                    PreferencesStrength.Add(i+1);
+                    StatesNames.Add(Enum.GetNames(enumType)[i]);
                 }
             }
             else
             {
                 PreferencesStrength = preferencesStrength;
+                StatesNames = statesNames;
             }
         }
     }    
