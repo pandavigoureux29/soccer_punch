@@ -7,13 +7,10 @@ public class PlayerSpawnManager : NetworkBehaviour {
 
     [SerializeField] Camera secondCamera;
      
-    List<Transform> m_teams;
-
     bool isMainTeam = false;
     
     // Use this for initialization
     void Start () {
-        m_teams = new List<Transform>();
         FindObjectOfType<PlayerGenerator>().StartGeneration();
     }
     
@@ -29,7 +26,6 @@ public class PlayerSpawnManager : NetworkBehaviour {
         if (!inDropZone)
             return false;
         //Spawn player
-
         CmdSpawnPlayer(_playerData.name, pos.x, pos.y, IsMainTeam);
         return true;
     }
@@ -46,6 +42,8 @@ public class PlayerSpawnManager : NetworkBehaviour {
         playerComponent.PlayerDataName = _playerDataName;
         playerComponent.IsMainTeam = _mainTeam;
         NetworkServer.Spawn(player);
+        //Add to game manager
+        FindObjectOfType<GameManager>().AddPlayer(playerComponent);
     }
 
     [ClientRpc]

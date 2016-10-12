@@ -30,6 +30,13 @@ public class ScoreComponent : MonoBehaviour
         SetScoreText();
     }
 
+    public void SetScore(int scoreMain, int scoreOther)
+    {
+        team1.Score = scoreMain;
+        team2.Score = scoreOther;
+        SetScoreText();
+    }
+
     public void SetScoreText()
     {
         ScoreTextTeam1.text = team1.Score.ToString();

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class DebugControllerComponent : MonoBehaviour
+public class DebugControllerComponent : NetworkBehaviour
 {
 
     public float speed;
@@ -13,8 +14,17 @@ public class DebugControllerComponent : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     void FixedUpdate()
     {
+        if (rb == null)
+            return;
+
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 

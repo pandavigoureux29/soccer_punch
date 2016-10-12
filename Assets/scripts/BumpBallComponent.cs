@@ -10,14 +10,22 @@ public class BumpBallComponent : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        rb = GameObject.FindGameObjectWithTag("Ball").GetComponent<Rigidbody2D>();
+        SearchBall();
     }
 
+    void SearchBall()
+    {
+        var ball = GameObject.FindGameObjectWithTag("Ball");
+        if (ball != null)
+            rb = ball.GetComponent<Rigidbody2D>();
+    }
 
     void FixedUpdate()
     {
         if (rb != null)
             oldVelocity = rb.velocity;
+        else
+            SearchBall();
     }
 
     void OnCollisionEnter2D(Collision2D col)
