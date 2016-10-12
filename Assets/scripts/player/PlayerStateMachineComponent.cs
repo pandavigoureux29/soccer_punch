@@ -3,6 +3,9 @@ using System.Collections;
 
 public class PlayerStateMachineComponent : MonoBehaviour
 {
+    public PlayerDataAsset PlayerData;
+    private PlayerComponent playerComp;
+
     public enum PlayerState
     {
         JustSpawned = 0,
@@ -57,6 +60,7 @@ public class PlayerStateMachineComponent : MonoBehaviour
     void Start()
     {
         CurrentState = PlayerState.JustSpawned;
+        playerComp = gameObject.GetComponent<PlayerComponent>();
     }
 
     void Update()
