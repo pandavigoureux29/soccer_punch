@@ -41,6 +41,10 @@ public class PlayerSpawnManager : NetworkBehaviour {
         var playerComponent = player.GetComponent<PlayerComponent>();
         playerComponent.PlayerDataName = _playerDataName;
         playerComponent.IsMainTeam = _mainTeam;
+        playerComponent.PlayerData = data;
+        playerComponent.CurrentHealth = data.MaxLife;
+        playerComponent.playerStateMachine = player.GetComponent<PlayerStateMachineComponent>();
+        playerComponent.playerStateMachine.PlayerData = data;
         NetworkServer.Spawn(player);
         //Add to game manager
         FindObjectOfType<GameManager>().AddPlayer(playerComponent);

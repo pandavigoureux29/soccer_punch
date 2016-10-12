@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class PlayerStateMachineComponent : NetworkBehaviour
 {
-    private PlayerDataAsset playerData;
+    public PlayerDataAsset PlayerData;
     private PlayerComponent playerComp;
     public event Action<GameObject> BallAwareEvent;
     public event Action<GameObject> BallCaughtEvent;
@@ -56,11 +56,17 @@ public class PlayerStateMachineComponent : NetworkBehaviour
         Explode
     }
 
+    [SyncVar]
     public PlayerState CurrentState;
+    [SyncVar]
     public IdleState CurrentIdleState;
+    [SyncVar]
     public BallState CurrentBallState;
+    [SyncVar]
     public EnemyState CurrentEnemyState;
+    [SyncVar]
     public KickState CurrentKickState;
+    [SyncVar]
     public DeadState CurrentDeadState;
 
     public override void OnStartServer()
@@ -104,27 +110,27 @@ public class PlayerStateMachineComponent : NetworkBehaviour
 
     private void initStates()
     {
-        var preference = playerData.PreferredPlayerState;
+        var preference = PlayerData.PreferredPlayerState;
         var states = preference.GetSortedStates();
         CurrentState = ParseEnum<PlayerState>(states[0]);
 
-        preference = playerData.PreferredIdleState;
+        preference = PlayerData.PreferredIdleState;
         states = preference.GetSortedStates();
         CurrentIdleState = ParseEnum<IdleState>(states[0]);
 
-        preference = playerData.PreferredBallState;
+        preference = PlayerData.PreferredBallState;
         states = preference.GetSortedStates();
         CurrentBallState = ParseEnum<BallState>(states[0]);
 
-        preference = playerData.PreferredEnemyState;
+        preference = PlayerData.PreferredEnemyState;
         states = preference.GetSortedStates();
         CurrentEnemyState = ParseEnum<EnemyState>(states[0]);
 
-        preference = playerData.PreferredKickState;
+        preference = PlayerData.PreferredKickState;
         states = preference.GetSortedStates();
         CurrentKickState = ParseEnum<KickState>(states[0]);
 
-        preference = playerData.PreferredDeadState;
+        preference = PlayerData.PreferredDeadState;
         states = preference.GetSortedStates();
         CurrentDeadState = ParseEnum<DeadState>(states[0]);
     }
@@ -193,7 +199,7 @@ public class PlayerStateMachineComponent : NetworkBehaviour
         switch (CurrentDeadState)
         {
             case DeadState.Fade:
-                //Destroy(gameObject);
+                Destroy(gameObject);
                 break;
             case DeadState.Explode:
                 break;

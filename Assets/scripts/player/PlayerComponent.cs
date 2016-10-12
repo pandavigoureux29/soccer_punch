@@ -15,8 +15,8 @@ public class PlayerComponent : NetworkBehaviour {
 
     [SyncVar]
     public float CurrentHealth;
-
-    PlayerStateMachineComponent playerStateMachine;
+    
+    public PlayerStateMachineComponent playerStateMachine;
 
     protected PlayerDataAsset m_playerData;
     
@@ -36,10 +36,9 @@ public class PlayerComponent : NetworkBehaviour {
             {
                 m_renderer.sprite = m_playerData.imageB;
             }
-            CurrentHealth = m_playerData.MaxLife;
-            playerStateMachine = GetComponent<PlayerStateMachineComponent>();
         }
     }
+    
 
     void Update()
     {
@@ -65,6 +64,10 @@ public class PlayerComponent : NetworkBehaviour {
         {
             return m_playerData;
         }
+        set
+        {
+            m_playerData = value;
+        }
         
     }
 
@@ -83,10 +86,13 @@ public class PlayerComponent : NetworkBehaviour {
 
     public void TakeDamage(float damageAmount)
     {
-        CurrentHealth -= damageAmount;
-        if (CurrentHealth <= 0f)
+        if (isServer)
         {
-            playerStateMachine.OnDead();
+            CurrentHealth -= damageAmount;
+            if (CurrentHealth <= 0f)
+            {
+                playerStateMachine.OnDead();
+            }
         }
     }
 }
