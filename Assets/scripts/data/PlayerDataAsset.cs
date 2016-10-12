@@ -53,7 +53,7 @@ public class StatePreference
                 var listLength = Enum.GetNames(enumType).Length;
                 for (int i = 0; i < listLength; ++i)
                 {
-                    PreferencesStrength.Add(1f / listLength);
+                    PreferencesStrength.Add(i+1);
                     StatesNames.Add(Enum.GetNames(enumType)[i]);
                 }
             }
