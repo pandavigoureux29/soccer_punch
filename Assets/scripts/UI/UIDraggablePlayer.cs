@@ -47,6 +47,7 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void OnBeginDrag(PointerEventData _eventData)
     {
         m_initialPosition = transform.localPosition;
+        GameObject.Find("AuthorizedDropZone").GetComponent<SpriteRenderer>().enabled = true;
     }
 
     public void OnDrag(PointerEventData _eventData)
@@ -57,6 +58,7 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnEndDrag(PointerEventData _eventData)
     {
+        GameObject.Find("AuthorizedDropZone").GetComponent<SpriteRenderer>().enabled = false;
         if (m_available == false)
             return;
 
