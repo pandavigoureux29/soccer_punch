@@ -22,10 +22,6 @@ public class PlayerComponent : NetworkBehaviour {
     public PlayerStateMachineComponent playerStateMachine;
 
     protected PlayerDataAsset m_playerData;
-
-    //Run
-    public bool IsRunning = false;
-    private Vector3 runDestination = Vector3.zero;
     
     public override void OnStartClient()
     {
@@ -50,10 +46,6 @@ public class PlayerComponent : NetworkBehaviour {
     void Update()
     {
         TakeDamage(Time.deltaTime * m_playerData.LifeCost);
-        if (IsRunning)
-        {
-            runStep();
-        }
     }
 
     public string PlayerDataName
@@ -106,23 +98,14 @@ public class PlayerComponent : NetworkBehaviour {
             }
         }
     }
+    
 
     public void RunTo(Vector3 destination)
     {
-        runDestination = destination;
-        IsRunning = true;
-    }
-
-    private void runStep()
-    {
         if (isServer)
         {
-            var movement = runDestination - transform.position;
-            if (movement.magnitude == 0f || DistanceLeftToRun <= 0f)
-            {
-                IsRunning = false;
-            }
-            else
+            var movement = destination - transform.position;
+            if (movement.magnitude != 0f && DistanceLeftToRun > 0f)
             {
                 movement *= Time.deltaTime * PlayerData.Speed / 100f;
                 transform.Translate(movement);
