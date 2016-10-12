@@ -8,8 +8,6 @@ public class PlayerComponent : NetworkBehaviour {
     [SerializeField]
     SpriteRenderer m_renderer;
     
-    PlayerDataAsset playerData;
-
     [SyncVar]
     protected string playerDataName;
     [SyncVar]

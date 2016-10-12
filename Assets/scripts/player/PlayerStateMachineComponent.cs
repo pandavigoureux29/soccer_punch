@@ -65,14 +65,7 @@ public class PlayerStateMachineComponent : MonoBehaviour
     void Start()
     {
         CurrentState = PlayerState.JustSpawned;
-        playerComp = gameObject.GetComponent<PlayerComponent>();
-
-        //To Remove
-        playerData = new PlayerDataAsset();
-        //playerData = playerComp.PlayerData;
-        //
-
-
+        playerComp = gameObject.GetComponent<PlayerComponent>();        
     }
 
     void Update()
@@ -218,6 +211,17 @@ public class PlayerStateMachineComponent : MonoBehaviour
         CurrentState = PlayerState.Dead;
     }
 
+    public void onBallAware(GameObject _ballGO)
+    {
+        if (BallAwareEvent != null)
+            BallAwareEvent.Invoke(_ballGO);
+    }
+
+    public void onPlayerAware(GameObject _player)
+    {
+        if (EnemyAwareEvent != null)
+            EnemyAwareEvent.Invoke(_player);
+    }
 
 
     #endregion

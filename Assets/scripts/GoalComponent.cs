@@ -15,7 +15,7 @@ public class GoalComponent : NetworkBehaviour {
         {
             if (col.gameObject.tag == "Ball")
             {
-                FindObjectOfType<GameManager>().AddScore(mainTeam);
+                FindObjectOfType<GameManager>().AddScore(!mainTeam);
             }
         }
     }
