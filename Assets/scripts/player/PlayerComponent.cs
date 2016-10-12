@@ -50,6 +50,15 @@ public class PlayerComponent : NetworkBehaviour {
         }
     }
 
+    public PlayerDataAsset PlayerData
+    {
+        get
+        {
+            return m_playerData;
+        }
+        
+    }
+
     public bool IsMainTeam
     {
         get
