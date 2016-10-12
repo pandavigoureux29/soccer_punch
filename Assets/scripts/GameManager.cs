@@ -7,15 +7,15 @@ public class GameManager : NetworkBehaviour {
 
     List<Team> m_teams;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    // Use this for initialization
+    void Start () {
+    
+    }
+    
+    // Update is called once per frame
+    void Update () {
+    
+    }
 
     public override void OnStartServer()
     {
