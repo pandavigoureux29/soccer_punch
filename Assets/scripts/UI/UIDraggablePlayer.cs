@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -41,7 +42,7 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void OnEndDrag(PointerEventData _eventData)
     {
         if( m_spawnManager == null ) 
-            m_spawnManager = Component.FindObjectOfType<PlayerSpawnManager>();
+            m_spawnManager = new List<PlayerSpawnManager>(Component.FindObjectsOfType<PlayerSpawnManager>()) { }.Find(x => x.isLocalPlayer);
 
         var success = m_spawnManager.SpawnPlayer(playerData);
         if( success)

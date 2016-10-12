@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerComponent : NetworkBehaviour {
     
@@ -10,34 +11,55 @@ public class PlayerComponent : NetworkBehaviour {
     [SyncVar]
     PlayerDataAsset playerData;
     
+    protected string playerDataName;
+    [SyncVar]
+    private bool mainTeam;
+
+    protected PlayerDataAsset m_playerData;
+    
     public override void OnStartClient()
     {
         base.OnStartClient();
-        var spawnManager = Component.FindObjectOfType<PlayerSpawnManager>();
+        var spawnManager = new List<PlayerSpawnManager>(Component.FindObjectsOfType<PlayerSpawnManager>()) {}.Find(x=>x.isLocalPlayer);
         if (spawnManager != null)
         {
-            if (spawnManager.IsMainTeam)
+            m_playerData = Instantiate(Resources.Load("data/" + playerDataName)) as PlayerDataAsset;
+            //if the same team
+            if ( spawnManager.IsMainTeam == IsMainTeam )
             {
-                m_renderer.sprite = playerData.imageA;
+                m_renderer.sprite = m_playerData.imageA;
             }
             else
             {
-                m_renderer.sprite = playerData.imageB;
+                m_renderer.sprite = m_playerData.imageB;
             }
         }
     }
 
 
-    public PlayerDataAsset PlayerData
+    public string PlayerDataName
     {
         get
         {
-            return playerData;
+            return playerDataName;
         }
 
         set
         {
-            playerData = value;
+            playerDataName = value;
+        }
+    }
+
+    public bool IsMainTeam
+    {
+        get
+        {
+            return mainTeam;
+        }
+
+        set
+        {
+            mainTeam = value;
         }
     }
 }
