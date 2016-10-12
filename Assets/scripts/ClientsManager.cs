@@ -4,8 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ClientsManager : NetworkBehaviour {
-
-    [SerializeField] Camera secondCamera;
+    
     //Server
     List<int> m_teamsConnectionIds = new List<int>();
     public bool m_teamInfosSent = false;
