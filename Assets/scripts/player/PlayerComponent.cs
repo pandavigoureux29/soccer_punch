@@ -8,9 +8,9 @@ public class PlayerComponent : NetworkBehaviour {
     [SerializeField]
     SpriteRenderer m_renderer;
     
-    [SyncVar]
     PlayerDataAsset playerData;
-    
+
+    [SyncVar]
     protected string playerDataName;
     [SyncVar]
     private bool mainTeam;

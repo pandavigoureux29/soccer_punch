@@ -17,16 +17,18 @@ public class PlayerGenerator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        StartGeneration();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        m_time += Time.deltaTime;
-        if( m_time > m_deltaGen)
+        if (m_launched)
         {
-            m_time = 0.0f;
-            SpawnUIPlayer();
+            m_time += Time.deltaTime;
+            if (m_time > m_deltaGen)
+            {
+                m_time = 0.0f;
+                SpawnUIPlayer();
+            }
         }
 	}
 
@@ -34,6 +36,10 @@ public class PlayerGenerator : MonoBehaviour {
     {
         m_time = 0;
         m_launched = true;
+        for(int i=0;i < 4; i++)
+        {
+            SpawnUIPlayer();
+        }
     }
 
     void SpawnUIPlayer()

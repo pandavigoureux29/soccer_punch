@@ -14,6 +14,7 @@ public class PlayerSpawnManager : NetworkBehaviour {
     // Use this for initialization
     void Start () {
         m_teams = new List<Transform>();
+        FindObjectOfType<PlayerGenerator>().StartGeneration();
     }
     
     // Update is called once per frame
@@ -54,6 +55,7 @@ public class PlayerSpawnManager : NetworkBehaviour {
         {
             isMainTeam = _isMainTeam;
             FindObjectOfType<CameraSwitcher>().SwitchCameras(_isMainTeam);
+            FindObjectOfType<PlayerGenerator>().StartGeneration();
         }
     }
 

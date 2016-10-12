@@ -20,13 +20,28 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
     bool m_empty = true;
     float m_time = 0;
 
+    bool m_available = false;
+
     PlayerSpawnManager m_spawnManager;
     Vector3 m_initialPosition;
 
-    public void Awake()
+    void Awake()
     {
         Empty();
         
+    }
+
+    void Update()
+    {
+        if (!m_empty && !m_available)
+        {
+            m_time -= Time.deltaTime;
+            if( m_time <= 0)
+            {
+                Activate();
+            }
+            m_text.text = ""+(int)m_time;
+        }
     }
     
     public void OnBeginDrag(PointerEventData _eventData)
@@ -36,11 +51,15 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnDrag(PointerEventData _eventData)
     {
-        this.transform.position = _eventData.position;
+        if( m_available )
+            this.transform.position = _eventData.position;
     }
 
     public void OnEndDrag(PointerEventData _eventData)
     {
+        if (m_available == false)
+            return;
+
         if( m_spawnManager == null ) 
             m_spawnManager = new List<PlayerSpawnManager>(Component.FindObjectsOfType<PlayerSpawnManager>()) { }.Find(x => x.isLocalPlayer);
 
@@ -58,15 +77,29 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
         m_emptyImage.gameObject.SetActive(true);
         m_text.gameObject.SetActive(false);
         m_empty = true;
+        m_available = false;
     }
 
-    public void Fill(PlayerDataAsset PlayerData)
+    public void Fill(PlayerDataAsset _playerData)
     {
         m_fullImage.gameObject.SetActive(true);
         m_emptyImage.gameObject.SetActive(false);
         m_text.gameObject.SetActive(true);
         m_empty = false;
-        m_time = 0;
+        m_time = _playerData.Cooldown;
+        Deactivate();
+    }
+
+    public void Activate()
+    {
+        m_available = true;
+        m_fullImage.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+        m_text.gameObject.SetActive(false); 
+    }
+
+    public void Deactivate()
+    {
+        m_fullImage.GetComponent<UnityEngine.UI.Image>().color = new Color(0.3f,0.3f,0.3f);
     }
 
     public PlayerDataAsset PlayerData
@@ -81,6 +114,8 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
             playerData = value;
         }
     }
+
+    public bool IsAvailable { get { return m_available; } }
 
     public bool IsEmpty { get { return m_empty; } }
 }
