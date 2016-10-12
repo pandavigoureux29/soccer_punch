@@ -27,7 +27,7 @@ public class PlayerAreaCollider : NetworkBehaviour {
         }else if( LayerMask.LayerToName( _coll.gameObject.layer) == "player")
         {
             var otherPlayerComp = _coll.GetComponent<PlayerComponent>();
-            if (otherPlayerComp.IsMainTeam == player.IsMainTeam)
+            if (otherPlayerComp != null &&  otherPlayerComp.IsMainTeam == player.IsMainTeam)
             {
                 var statemachine = player.GetComponent<PlayerStateMachineComponent>();
                 statemachine.onBallAware(_coll.gameObject);
