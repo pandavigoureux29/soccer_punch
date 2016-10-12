@@ -144,6 +144,12 @@ public class PlayerStateMachineComponent : NetworkBehaviour
             case IdleState.Patrolling:
                 break;
             case IdleState.Running:
+                if (!playerComp.IsRunning)
+                {
+                    var goal = playerComp.FindOpposingTeamGoal();
+                    if (goal != null)
+                        playerComp.RunTo(goal.transform.position);
+                }
                 break;
             case IdleState.BallAware:
                 break;
@@ -230,7 +236,6 @@ public class PlayerStateMachineComponent : NetworkBehaviour
         if (EnemyAwareEvent != null)
             EnemyAwareEvent.Invoke(_player);
     }
-
 
     #endregion
 }

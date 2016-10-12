@@ -43,6 +43,7 @@ public class PlayerSpawnManager : NetworkBehaviour {
         playerComponent.IsMainTeam = _mainTeam;
         playerComponent.PlayerData = data;
         playerComponent.CurrentHealth = data.MaxLife;
+        playerComponent.DistanceLeftToRun = data.TravelDistance;
         playerComponent.playerStateMachine = player.GetComponent<PlayerStateMachineComponent>();
         playerComponent.playerStateMachine.PlayerData = data;
         NetworkServer.Spawn(player);

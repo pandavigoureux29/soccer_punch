@@ -3,7 +3,8 @@ using UnityEngine.Networking;
 
 public class GoalComponent : NetworkBehaviour {
 
-    [SerializeField] bool mainTeam;
+    [SerializeField]
+    public bool mainTeam;
 
     void Start()
     {
