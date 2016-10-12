@@ -16,7 +16,5 @@ public class UIDropZone : MonoBehaviour, IDropHandler , IPointerEnterHandler, IP
 
     public void OnDrop(PointerEventData _eventData)
     {
-        Debug.Log(_eventData.position);
-        Camera.main.ScreenToWorldPoint(_eventData.position);
     }
 }

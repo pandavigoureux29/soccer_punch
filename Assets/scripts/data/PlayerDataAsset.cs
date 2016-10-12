@@ -19,6 +19,6 @@ public class PlayerDataAsset : ScriptableObject {
     public float OffensiveStrength;
     public float DefensiveStrength;
 
-    public string imageA;
-    public string imageB;
+    public Sprite imageA;
+    public Sprite imageB;
 }

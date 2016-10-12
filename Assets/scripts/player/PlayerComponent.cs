@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class PlayerComponent : MonoBehaviour
+public class PlayerComponent : NetworkBehaviour
 {
+    [SerializeField] SpriteRenderer m_renderer;
+
     public enum PlayerState
     {
         Idle = 0,
@@ -33,29 +36,49 @@ public class PlayerComponent : MonoBehaviour
         Pass,
         ToEnemy
     }
-
-    public string PrefabPath;
-    public float Cooldown;
-    public float MaxLife;
-    public float LifeCost;
-    public float Speed;
-    public float TravelDistance;
-    public float ActionRadius;
-    public Time AwarenessDuration;
-    public float KickSpeed;
-    public float KickPrecision;
-    public float BallCatchThreshold;
-    public Quaternion ActionAngle;
-    public float OffensiveStrength;
-    public float DefensiveStrength;
+    
     public PlayerState CurrentState;
     public IdleState CurrentIdleState;
     public EnemyState CurrentEnemyState;
     public KickState CurrentKickState;
 
+    [SyncVar]
+    PlayerDataAsset playerData;
+    
     void Start()
     {
         CurrentState = PlayerState.Idle;
         CurrentIdleState = IdleState.Static;
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        var spawnManager = Component.FindObjectOfType<PlayerSpawnManager>();
+        if( spawnManager != null )
+        {
+            if( spawnManager.IsMainTeam)
+            {
+                m_renderer.sprite = playerData.imageA;
+            }
+            else
+            {
+                m_renderer.sprite = playerData.imageB;
+            }
+        }
+    }
+
+
+    public PlayerDataAsset PlayerData
+    {
+        get
+        {
+            return playerData;
+        }
+
+        set
+        {
+            playerData = value;
+        }
     }
 }
