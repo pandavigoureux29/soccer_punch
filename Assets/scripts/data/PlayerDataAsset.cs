@@ -49,12 +49,17 @@ public class PlayerDataAsset : ScriptableObject {
 //    }
 //}
 
+[System.Serializable]
 public class StatePreference
 {
+    [SerializeField]
     public Type RelatedStateEnum;
+    [SerializeField]
     public List<float> PreferencesStrength;
+    [SerializeField]
+    public List<string> StatesNames;
 
-    public StatePreference(Type enumType, List<float> preferencesStrength = null)
+    public StatePreference(Type enumType, List<float> preferencesStrength = null, List<string> statesNames = null)
     {
         if (enumType.IsEnum)
         {
@@ -62,15 +67,18 @@ public class StatePreference
             if (preferencesStrength == null)
             {
                 PreferencesStrength = new List<float>();
+                StatesNames = new List<string>();
                 var listLength = Enum.GetNames(enumType).Length;
                 for (int i = 0; i < listLength; ++i)
                 {
                     PreferencesStrength.Add(1f / listLength);
+                    StatesNames.Add(Enum.GetNames(enumType)[i]);
                 }
             }
             else
             {
                 PreferencesStrength = preferencesStrength;
+                StatesNames = statesNames;
             }
         }
     }    
