@@ -24,6 +24,7 @@ public class PlayerDataAsset : ScriptableObject {
     public Sprite imageB;
 
     //State Machine Preferences
+    public StatePreference PreferredPlayerState = new StatePreference(typeof(PlayerStateMachineComponent.PlayerState));
     public StatePreference PreferredIdleState = new StatePreference(typeof(PlayerStateMachineComponent.IdleState));
     public StatePreference PreferredBallState = new StatePreference(typeof(PlayerStateMachineComponent.BallState));
     public StatePreference PreferredEnemyState = new StatePreference(typeof(PlayerStateMachineComponent.EnemyState));
