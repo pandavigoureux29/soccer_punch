@@ -31,24 +31,6 @@ public class PlayerDataAsset : ScriptableObject {
     public StatePreference PreferredDeadState = new StatePreference(typeof(PlayerStateMachineComponent.DeadState));
 }
 
-//public class StatePreference
-//{
-//    public int PreferredState;
-//    public float PreferenceStrength;
-
-//    public StatePreference(int preferredState, float preferenceStrength = 100)
-//    {
-//        PreferredState = preferredState;
-//        PreferenceStrength = preferenceStrength;
-//    }
-
-//    public StatePreference()
-//    {
-//        PreferredState = 0;
-//        PreferenceStrength = 100f;
-//    }
-//}
-
 [System.Serializable]
 public class StatePreference
 {
