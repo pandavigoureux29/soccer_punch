@@ -81,6 +81,8 @@ public class PlayerStateMachineComponent : NetworkBehaviour
     
     void Update()
     {
+        if (!isServer)
+            return;
         switch (CurrentState)
         {
             case PlayerState.JustSpawned:
