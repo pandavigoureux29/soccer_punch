@@ -22,6 +22,15 @@ public class PlayerComponent : NetworkBehaviour {
     public PlayerStateMachineComponent playerStateMachine;
 
     protected PlayerDataAsset m_playerData;
+
+    //Run
+    private Vector3 oldDestination = new Vector3(999, 999, 999);
+    private Vector3 oldMovement;
+
+    //Patrol
+    public bool IsPatrolling = false;
+    private List<Vector3> patrollingLimitPositions = new List<Vector3>();
+    public int GoingTowardsPosIndex;
     
     public override void OnStartClient()
     {
@@ -46,6 +55,9 @@ public class PlayerComponent : NetworkBehaviour {
     void Update()
     {
         TakeDamage(Time.deltaTime * m_playerData.LifeCost);
+
+        if (IsPatrolling)
+            patrolStep();
     }
 
     public string PlayerDataName
@@ -104,14 +116,64 @@ public class PlayerComponent : NetworkBehaviour {
     {
         if (isServer)
         {
-            var movement = destination - transform.position;
-            if (movement.magnitude != 0f && DistanceLeftToRun > 0f)
+            var progress = destination - transform.position;
+            if (progress.magnitude > 0.2f && DistanceLeftToRun > 0f)
             {
-                movement *= Time.deltaTime * PlayerData.Speed / 100f;
+                Vector3 movement = Vector3.zero;
+                if (destination == oldDestination)
+                {
+                    movement = oldMovement;
+                }
+                else
+                {
+                    movement = destination - transform.position;
+                    movement *= Time.deltaTime * PlayerData.Speed / 100f;
+                    oldMovement = movement;
+                    oldDestination = destination;
+                }
                 transform.Translate(movement);
                 DistanceLeftToRun -= movement.sqrMagnitude;
             }
+            else if (IsPatrolling && DistanceLeftToRun > 0f)
+            {
+                ReversePatrolOrientation();
+            }
         }
+    }
+
+    public void Patrol()
+    {
+        if (patrollingLimitPositions == null)
+            patrollingLimitPositions = new List<Vector3>();
+        patrollingLimitPositions.Clear();
+        var position1 = transform.position;
+        position1.x -= PlayerData.PatrollingDistance;
+        var position2 = transform.position;
+        position2.x += PlayerData.PatrollingDistance;
+        patrollingLimitPositions.Add(position1);
+        patrollingLimitPositions.Add(position2);
+
+        GoingTowardsPosIndex = 0;
+        IsPatrolling = true;
+    }
+
+    private void patrolStep()
+    {
+        var destination = patrollingLimitPositions[GoingTowardsPosIndex];
+        RunTo(destination);
+    }
+
+    public void ReversePatrolOrientation()
+    {
+        if (isServer)
+        {
+            GoingTowardsPosIndex = GoingTowardsPosIndex == 0 ? 1 : 0;
+        }
+    }
+
+    public void StopPatrol()
+    {
+        IsPatrolling = false;
     }
 
     public GameObject FindOpposingTeamGoal()

@@ -24,13 +24,30 @@ public class PlayerAreaCollider : NetworkBehaviour {
         {
             var statemachine = player.GetComponent<PlayerStateMachineComponent>();
             statemachine.onBallAware(_coll.gameObject);
-        }else if( LayerMask.LayerToName( _coll.gameObject.layer) == "player")
+        }
+        else if (LayerMask.LayerToName(_coll.gameObject.layer) == "player")
         {
             var otherPlayerComp = _coll.GetComponent<PlayerComponent>();
-            if (otherPlayerComp != null &&  otherPlayerComp.IsMainTeam == player.IsMainTeam)
+            if (otherPlayerComp != null && otherPlayerComp.IsMainTeam == player.IsMainTeam)
             {
                 var statemachine = player.GetComponent<PlayerStateMachineComponent>();
                 statemachine.onBallAware(_coll.gameObject);
+            }
+        }
+        else if (_coll.gameObject.name.Contains("goal"))
+        {
+            var goalComp = gameObject.GetComponent<GoalComponent>();
+            if (goalComp.mainTeam != player.IsMainTeam)
+            {
+                var statemachine = player.GetComponent<PlayerStateMachineComponent>();
+                if(statemachine.CurrentState == PlayerStateMachineComponent.PlayerState.Ball)
+                {
+                    statemachine.CurrentState = PlayerStateMachineComponent.PlayerState.Kick;
+                }
+                else if (statemachine.CurrentState == PlayerStateMachineComponent.PlayerState.Idle && statemachine.CurrentIdleState == PlayerStateMachineComponent.IdleState.Running)
+                {
+                    statemachine.CurrentIdleState = PlayerStateMachineComponent.IdleState.BallAware;
+                }
             }
         }
     }

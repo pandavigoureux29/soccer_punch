@@ -140,17 +140,23 @@ public class PlayerStateMachineComponent : NetworkBehaviour
         switch (CurrentIdleState)
         {
             case IdleState.Static:
+                playerComp.StopPatrol();
                 break;
             case IdleState.Patrolling:
+                if(!playerComp.IsPatrolling)
+                    playerComp.Patrol();
                 break;
             case IdleState.Running:
+                playerComp.StopPatrol();
                 var goal = playerComp.FindOpposingTeamGoal();
                 if (goal != null)
                     playerComp.RunTo(goal.transform.position);
                 break;
             case IdleState.BallAware:
+                playerComp.StopPatrol();
                 break;
             case IdleState.EnemyAware:
+                playerComp.StopPatrol();
                 break;
             default:
                 return;
@@ -159,6 +165,7 @@ public class PlayerStateMachineComponent : NetworkBehaviour
 
     public void HandleBallState()
     {
+        playerComp.StopPatrol();
         switch (CurrentBallState)
         {
             case BallState.RunTo:
@@ -172,6 +179,7 @@ public class PlayerStateMachineComponent : NetworkBehaviour
 
     public void HandleEnemyState()
     {
+        playerComp.StopPatrol();
         switch (CurrentEnemyState)
         {
             case EnemyState.Fight:
@@ -185,6 +193,7 @@ public class PlayerStateMachineComponent : NetworkBehaviour
 
     public void HandleKickState()
     {
+        playerComp.StopPatrol();
         switch (CurrentKickState)
         {
             case KickState.ToGoal:

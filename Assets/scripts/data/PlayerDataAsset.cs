@@ -12,6 +12,7 @@ public class PlayerDataAsset : ScriptableObject {
     public float LifeCost;
     public float Speed;
     public float TravelDistance;
+    public float PatrollingDistance;
     public float ActionRadius;
     public float AwarenessDuration;
     public float KickSpeed;
