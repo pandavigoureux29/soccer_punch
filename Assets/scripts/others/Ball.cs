@@ -14,7 +14,7 @@ public class Ball : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
-
+        OwnerId = -1;
     }
 
     // Update is called once per frame
