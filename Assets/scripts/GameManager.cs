@@ -34,7 +34,7 @@ public class GameManager : NetworkBehaviour {
         int index = mainTeam ? 0 : 1;
         m_teams[index].Score += 1;
         RpcScoreChanged(m_teams[0].Score, m_teams[1].Score);
-        ResetField();
+        //ResetField();
     }
 
     [ClientRpc]
@@ -42,6 +42,7 @@ public class GameManager : NetworkBehaviour {
     {
         var scoreComp = FindObjectOfType<ScoreComponent>();
         scoreComp.SetScore(scoreMain, scoreOther);
+        ResetField();
     }
 
     public void ResetField()

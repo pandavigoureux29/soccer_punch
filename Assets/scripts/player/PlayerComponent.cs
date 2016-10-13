@@ -43,13 +43,22 @@ public class PlayerComponent : NetworkBehaviour {
         {
             m_playerData = Instantiate(Resources.Load("data/" + playerDataName)) as PlayerDataAsset;
             //if the same team
-            if ( spawnManager.IsMainTeam == IsMainTeam )
+            //if ( spawnManager.IsMainTeam == IsMainTeam )
+            //{
+            //    m_renderer.sprite = m_playerData.imageOnFieldA;
+            //}
+            //else
+            //{
+            //    m_renderer.sprite = m_playerData.imageOnFieldB;
+            //}
+            if (IsMainTeam)
             {
                 m_renderer.sprite = m_playerData.imageOnFieldA;
             }
             else
             {
                 m_renderer.sprite = m_playerData.imageOnFieldB;
+                m_renderer.transform.Rotate(new Vector3(0, 0, 180));
             }
         }
     }
