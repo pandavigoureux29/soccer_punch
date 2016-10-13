@@ -216,6 +216,10 @@ public class PlayerStateMachineComponent : NetworkBehaviour
                     playerComp.KickBall(allyToPass.transform.position, true);
                     ChangeState(PlayerState.Dead);
                 }
+                else
+                {
+                    ChangeState(KickState.ToGoal);
+                }
                 break;
             case KickState.ToEnemy:
                 break;
@@ -254,6 +258,13 @@ public class PlayerStateMachineComponent : NetworkBehaviour
         if (isServer)
         {
             CurrentIdleState = state;
+        }
+    }
+    public void ChangeState(KickState state)
+    {
+        if (isServer)
+        {
+            CurrentKickState = state;
         }
     }
 
