@@ -92,20 +92,20 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
         m_empty = false;
         m_time = _playerData.Cooldown;
         playerData = _playerData;
-		m_fullImage.GetComponent<Image> ().sprite = playerData.CardImage;
+		m_fullImage.GetComponent<Image> ().sprite = playerData.imageTokenReady;
         Deactivate();
     }
 
     public void Activate()
     {
-        m_available = true;
-        m_fullImage.GetComponent<UnityEngine.UI.Image>().color = Color.white;
+		m_available = true;
+		m_fullImage.GetComponent<Image> ().sprite = playerData.imageTokenReady;
         m_text.gameObject.SetActive(false); 
     }
 
     public void Deactivate()
     {
-        m_fullImage.GetComponent<UnityEngine.UI.Image>().color = new Color(0.3f,0.3f,0.3f);
+		m_fullImage.GetComponent<UnityEngine.UI.Image> ().sprite = playerData.imageTokenCD;
     }
 
     public PlayerDataAsset PlayerData
