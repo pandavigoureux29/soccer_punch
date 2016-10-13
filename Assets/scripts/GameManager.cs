@@ -34,6 +34,7 @@ public class GameManager : NetworkBehaviour {
         int index = mainTeam ? 0 : 1;
         m_teams[index].Score += 1;
         RpcScoreChanged(m_teams[0].Score, m_teams[1].Score);
+        ResetField();
     }
 
     [ClientRpc]
@@ -41,6 +42,22 @@ public class GameManager : NetworkBehaviour {
     {
         var scoreComp = FindObjectOfType<ScoreComponent>();
         scoreComp.SetScore(scoreMain, scoreOther);
+    }
+
+    public void ResetField()
+    {
+        var players = FindObjectsOfType<PlayerComponent>();
+        foreach(var player in players)
+        {
+            player.playerStateMachine.ChangeState(PlayerStateMachineComponent.PlayerState.Dead);
+        }
+
+        var ball = FindObjectOfType<Ball>();
+        if(ball != null)
+        {
+            ball.StopBallMovement();
+            ball.transform.position = Vector3.zero;
+        }
     }
 
     public class Team
