@@ -22,8 +22,11 @@ public class PlayerDataAsset : ScriptableObject {
     public float OffensiveStrength;
     public float DefensiveStrength;
     
-    public Sprite imageA;
-    public Sprite imageB;
+    public Sprite imageOnFieldA;
+    public Sprite imageOnFieldB;
+
+    public Sprite imageTokenCD;
+    public Sprite imageTokenReady;
 
     //State Machine Preferences
     public StatePreference PreferredPlayerState = new StatePreference(typeof(PlayerStateMachineComponent.PlayerState));

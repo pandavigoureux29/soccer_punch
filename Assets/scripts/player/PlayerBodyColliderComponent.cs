@@ -2,19 +2,12 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class PlayerBodyColliderComponent : NetworkBehaviour
+public class PlayerBodyColliderComponent : MonoBehaviour
 {
 
     [SerializeField]
     PlayerComponent player;
-
-    // Use this for initialization
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-
-    }
-
+    
     // Update is called once per frame
     void Update()
     {
