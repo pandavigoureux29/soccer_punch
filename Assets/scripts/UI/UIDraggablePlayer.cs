@@ -92,6 +92,7 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
         m_empty = false;
         m_time = _playerData.Cooldown;
         playerData = _playerData;
+		m_fullImage.GetComponent<Image> ().sprite = playerData.CardImage;
         Deactivate();
     }
 

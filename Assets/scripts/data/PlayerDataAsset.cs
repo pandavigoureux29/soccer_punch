@@ -25,6 +25,8 @@ public class PlayerDataAsset : ScriptableObject {
     public Sprite imageA;
     public Sprite imageB;
 
+	public Sprite CardImage;
+
     //State Machine Preferences
     public StatePreference PreferredPlayerState = new StatePreference(typeof(PlayerStateMachineComponent.PlayerState));
     public StatePreference PreferredIdleState = new StatePreference(typeof(PlayerStateMachineComponent.IdleState));
