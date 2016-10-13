@@ -207,14 +207,14 @@ public class PlayerStateMachineComponent : NetworkBehaviour
                 var goal = playerComp.FindOpposingTeamGoal();
                 if (goal != null)
                     playerComp.KickBall(goal.transform.position);
-                ChangeState(PlayerState.Idle);
+                ChangeState(PlayerState.Dead);
                 break;
             case KickState.Pass:
                 var allyToPass = playerComp.FindClosestAlly();
                 if (allyToPass != null)
                 {
                     playerComp.KickBall(allyToPass.transform.position, true);
-                    ChangeState(PlayerState.Idle);
+                    ChangeState(PlayerState.Dead);
                 }
                 break;
             case KickState.ToEnemy:
@@ -244,7 +244,7 @@ public class PlayerStateMachineComponent : NetworkBehaviour
 
     public void ChangeState(PlayerState state)
     {
-        if (isServer)
+        if (isServer && CurrentState != PlayerState.Dead)
         {
             CurrentState = state;
         }
