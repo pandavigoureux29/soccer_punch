@@ -36,7 +36,7 @@ public class PlayerAreaCollider : NetworkBehaviour {
         }
         else if (_coll.gameObject.name.Contains("goal"))
         {
-            var goalComp = gameObject.GetComponent<GoalComponent>();
+            var goalComp = _coll.gameObject.GetComponent<GoalComponent>();
             if (goalComp.mainTeam != player.IsMainTeam)
             {
                 var statemachine = player.GetComponent<PlayerStateMachineComponent>();

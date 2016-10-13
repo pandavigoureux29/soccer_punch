@@ -21,6 +21,11 @@ public class Ball : MonoBehaviour {
         m_owner = player;
     }
 
+    public PlayerComponent GetOwner()
+    {
+        return m_owner;
+    }
+
     public void Releaseball()
     {
         m_owner = null;

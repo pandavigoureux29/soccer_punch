@@ -123,13 +123,15 @@ public class PlayerComponent : NetworkBehaviour {
                 if (destination == oldDestination)
                 {
                     movement = oldMovement;
+                    movement *= Time.deltaTime * PlayerData.Speed / 100f;
                 }
                 else
                 {
                     movement = destination - transform.position;
-                    movement *= Time.deltaTime * PlayerData.Speed / 100f;
                     oldMovement = movement;
                     oldDestination = destination;
+
+                    movement *= Time.deltaTime * PlayerData.Speed / 100f;
                 }
                 transform.Translate(movement);
                 DistanceLeftToRun -= movement.sqrMagnitude;
@@ -178,9 +180,22 @@ public class PlayerComponent : NetworkBehaviour {
 
     public GameObject FindOpposingTeamGoal()
     {
-        var goalComp = FindObjectsOfType<GoalComponent>().First(g => g.mainTeam == mainTeam);
+        var goalComp = FindObjectsOfType<GoalComponent>().First(g => g.mainTeam != mainTeam);
         if (goalComp != null)
             return goalComp.gameObject;
         return null;
+    }
+
+    public void KickBall(Vector3 destination, bool isPass = false)
+    {
+        if (isServer)
+        {
+            var ball = GameObject.FindGameObjectWithTag("Ball");
+            if (ball == null || ball.GetComponent<Ball>().GetOwner() != this)
+                return;
+            var ballRB = ball.GetComponent<Rigidbody2D>();
+            var movement = destination - ballRB.transform.position;
+            ballRB.AddForce(movement * PlayerData.KickSpeed);
+        }
     }
 }
