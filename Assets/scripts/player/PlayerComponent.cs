@@ -45,11 +45,11 @@ public class PlayerComponent : NetworkBehaviour {
             //if the same team
             if ( spawnManager.IsMainTeam == IsMainTeam )
             {
-                m_renderer.sprite = m_playerData.imageA;
+                m_renderer.sprite = m_playerData.imageOnFieldA;
             }
             else
             {
-                m_renderer.sprite = m_playerData.imageB;
+                m_renderer.sprite = m_playerData.imageOnFieldB;
             }
         }
     }

@@ -14,7 +14,7 @@ public class Ball : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
-
+        OwnerId = -1;
     }
 
     // Update is called once per frame
@@ -35,6 +35,11 @@ public class Ball : NetworkBehaviour
         {
             m_owner = player;
             OwnerId = player.PlayerId;
+
+            //Stop ball
+            var rb = gameObject.GetComponent<Rigidbody2D>();
+            if (rb != null)
+                rb.velocity = Vector2.zero;
         }
     }
 
