@@ -34,7 +34,7 @@ public class PlayerComponent : NetworkBehaviour {
     public bool IsPatrolling = false;
     private List<Vector3> patrollingLimitPositions = new List<Vector3>();
     public int GoingTowardsPosIndex;
-    
+        
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -57,7 +57,8 @@ public class PlayerComponent : NetworkBehaviour {
 
     void Update()
     {
-        TakeDamage(Time.deltaTime * m_playerData.LifeCost);
+        if(m_playerData != null)
+            TakeDamage(Time.deltaTime * m_playerData.LifeCost);
 
         if (IsPatrolling)
             patrolStep();
@@ -106,6 +107,7 @@ public class PlayerComponent : NetworkBehaviour {
     {
         if (isServer)
         {
+            damageAmount = Mathf.Abs(damageAmount);
             CurrentHealth -= damageAmount;
             if (CurrentHealth <= 0f)
             {
@@ -214,5 +216,22 @@ public class PlayerComponent : NetworkBehaviour {
         if (closestAlly == null)
             return null;
         return closestAlly.gameObject;
+    }
+
+    public void FightEnemy(PlayerComponent enemy)
+    {
+        if (isServer)
+        {
+            if (enemy == null || enemy.CurrentHealth <= 0f)
+            {
+                playerStateMachine.ChangeState(PlayerStateMachineComponent.PlayerState.Idle);
+            }
+            else
+            {
+                if(enemy.playerStateMachine.CurrentState != PlayerStateMachineComponent.PlayerState.Enemy && enemy.playerStateMachine.CurrentState != PlayerStateMachineComponent.PlayerState.Dead)
+                    enemy.playerStateMachine.ChangeState(PlayerStateMachineComponent.PlayerState.Enemy);
+                enemy.TakeDamage((PlayerData.OffensiveStrength - enemy.PlayerData.DefensiveStrength) * Time.deltaTime);
+            }
+        }
     }
 }

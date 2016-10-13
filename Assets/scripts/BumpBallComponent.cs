@@ -32,7 +32,7 @@ public class BumpBallComponent : MonoBehaviour {
     {
         if (col.gameObject.tag == "Ball")
         {
-            if (rb == null || oldVelocity == null)
+            if (rb == null)
                 return;
 
             ContactPoint2D cp = col.contacts[0];

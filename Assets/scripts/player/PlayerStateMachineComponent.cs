@@ -192,6 +192,8 @@ public class PlayerStateMachineComponent : NetworkBehaviour
         switch (CurrentEnemyState)
         {
             case EnemyState.Fight:
+                if (detectedEnemy != null)
+                    playerComp.FightEnemy(detectedEnemy.GetComponent<PlayerComponent>());
                 break;
             case EnemyState.Evade:
                 break;
