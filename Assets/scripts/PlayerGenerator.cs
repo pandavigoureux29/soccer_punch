@@ -13,6 +13,8 @@ public class PlayerGenerator : MonoBehaviour {
 
     float m_time;
 
+    int playerCount = 0;
+
     public bool m_launched = false;
 
 	// Use this for initialization
@@ -58,7 +60,11 @@ public class PlayerGenerator : MonoBehaviour {
         {
             var dragg = transform.GetChild(i).GetComponent<UIDraggablePlayer>();
             if (dragg.IsEmpty)
+            {
+                dragg.PlayerId = playerCount;
+                playerCount++;
                 return dragg;
+            }
         }
         return null;
     }

@@ -25,6 +25,8 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
     PlayerSpawnManager m_spawnManager;
     Vector3 m_initialPosition;
 
+    public int PlayerId;
+
     void Awake()
     {
         Empty();
@@ -65,7 +67,7 @@ public class UIDraggablePlayer : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if( m_spawnManager == null ) 
             m_spawnManager = new List<PlayerSpawnManager>(Component.FindObjectsOfType<PlayerSpawnManager>()) { }.Find(x => x.isLocalPlayer);
 
-        var success = m_spawnManager.SpawnPlayer(playerData);
+        var success = m_spawnManager.SpawnPlayer(playerData, PlayerId);
         if( success)
         {
             Empty();

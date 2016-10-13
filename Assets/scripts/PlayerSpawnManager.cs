@@ -18,7 +18,7 @@ public class PlayerSpawnManager : NetworkBehaviour {
     void Update () {
     }
         
-    public bool SpawnPlayer(PlayerDataAsset _playerData)
+    public bool SpawnPlayer(PlayerDataAsset _playerData, int id)
     {
         var comp = Component.FindObjectOfType<UIDropZone>();
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -26,12 +26,12 @@ public class PlayerSpawnManager : NetworkBehaviour {
         if (!inDropZone)
             return false;
         //Spawn player
-        CmdSpawnPlayer(_playerData.Name, pos.x, pos.y, IsMainTeam);
+        CmdSpawnPlayer(_playerData.Name, pos.x, pos.y, IsMainTeam, id);
         return true;
     }
 
     [Command]
-    void CmdSpawnPlayer(string _playerDataName, float x, float y, bool _mainTeam)
+    void CmdSpawnPlayer(string _playerDataName, float x, float y, bool _mainTeam, int id)
     {
         PlayerDataAsset data = Instantiate(Resources.Load("data/" + _playerDataName)) as PlayerDataAsset;
         var player = Instantiate( Resources.Load("prefabs/players/"+ data.PrefabPath ) ) as GameObject;
@@ -40,6 +40,7 @@ public class PlayerSpawnManager : NetworkBehaviour {
         //Set values
         var playerComponent = player.GetComponent<PlayerComponent>();
         playerComponent.PlayerDataName = _playerDataName;
+        playerComponent.PlayerId = id;
         playerComponent.IsMainTeam = _mainTeam;
         playerComponent.PlayerData = data;
         playerComponent.CurrentHealth = data.MaxLife;

@@ -19,6 +19,9 @@ public class PlayerComponent : NetworkBehaviour {
     [SyncVar]
     public float DistanceLeftToRun;
 
+    [SyncVar]
+    public int PlayerId;
+
     public PlayerStateMachineComponent playerStateMachine;
 
     protected PlayerDataAsset m_playerData;
@@ -123,15 +126,16 @@ public class PlayerComponent : NetworkBehaviour {
                 if (destination == oldDestination)
                 {
                     movement = oldMovement;
-                    movement *= Time.deltaTime * PlayerData.Speed / 100f;
+                    movement *= Time.deltaTime * PlayerData.Speed;// / 25f;
                 }
                 else
                 {
                     movement = destination - transform.position;
+                    movement.Normalize();
                     oldMovement = movement;
                     oldDestination = destination;
 
-                    movement *= Time.deltaTime * PlayerData.Speed / 100f;
+                    movement *= Time.deltaTime * PlayerData.Speed;// / 25f;
                 }
                 transform.Translate(movement);
                 DistanceLeftToRun -= movement.sqrMagnitude;
@@ -191,11 +195,24 @@ public class PlayerComponent : NetworkBehaviour {
         if (isServer)
         {
             var ball = GameObject.FindGameObjectWithTag("Ball");
-            if (ball == null || ball.GetComponent<Ball>().GetOwner() != this)
+            var ballComp = ball.GetComponent<Ball>();
+            if (ball == null || ballComp == null || ballComp.GetOwner() != this)
                 return;
             var ballRB = ball.GetComponent<Rigidbody2D>();
             var movement = destination - ballRB.transform.position;
             ballRB.AddForce(movement * PlayerData.KickSpeed);
+            ballComp.Releaseball();
         }
+    }
+
+    public GameObject FindClosestAlly()
+    {
+        var allies = FindObjectsOfType<PlayerComponent>().Where(p => p.mainTeam == mainTeam && p.playerStateMachine.CurrentState == PlayerStateMachineComponent.PlayerState.Idle);
+        if (allies == null)
+            return null;
+        var closestAlly = allies.FirstOrDefault(al => Vector3.Distance(al.transform.position, transform.position) == allies.Min(a => Vector3.Distance(a.transform.position, transform.position)));
+        if (closestAlly == null)
+            return null;
+        return closestAlly.gameObject;
     }
 }

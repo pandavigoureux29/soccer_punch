@@ -1,24 +1,41 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
+using System.Linq;
 
-public class Ball : MonoBehaviour {
+public class Ball : NetworkBehaviour
+{
+    [SyncVar]
+    public int OwnerId;
+    private PlayerComponent m_owner;
 
-    PlayerComponent m_owner;
 
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-    public void GetBall(PlayerComponent player)
+    // Use this for initialization
+    public override void OnStartServer()
     {
-        m_owner = player;
+        base.OnStartServer();
+
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if (OwnerId != -1)
+        {
+            m_owner = FindObjectsOfType<PlayerComponent>().FirstOrDefault(p => p.PlayerId == OwnerId);
+        }
+        else
+        {
+            m_owner = null;
+        }
+	}
+
+    public void CatchBall(PlayerComponent player)
+    {
+        if (isServer)
+        {
+            m_owner = player;
+            OwnerId = player.PlayerId;
+        }
     }
 
     public PlayerComponent GetOwner()
@@ -28,7 +45,11 @@ public class Ball : MonoBehaviour {
 
     public void Releaseball()
     {
-        m_owner = null;
+        if (isServer)
+        {
+            m_owner = null;
+            OwnerId = -1;
+        }
     }
 
 }

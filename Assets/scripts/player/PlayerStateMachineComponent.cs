@@ -12,6 +12,9 @@ public class PlayerStateMachineComponent : NetworkBehaviour
     public event Action<GameObject> EnemyAwareEvent;
     public event Action DeadEvent;
 
+    private GameObject detectedBall;
+    private GameObject detectedEnemy;
+
     public enum PlayerState
     {
         JustSpawned = 0,
@@ -154,9 +157,13 @@ public class PlayerStateMachineComponent : NetworkBehaviour
                 break;
             case IdleState.BallAware:
                 playerComp.StopPatrol();
+                if (detectedBall != null)
+                    playerComp.RunTo(detectedBall.transform.position);
                 break;
             case IdleState.EnemyAware:
                 playerComp.StopPatrol();
+                if (detectedEnemy != null)
+                    playerComp.RunTo(detectedEnemy.transform.position);
                 break;
             default:
                 return;
@@ -197,8 +204,18 @@ public class PlayerStateMachineComponent : NetworkBehaviour
         switch (CurrentKickState)
         {
             case KickState.ToGoal:
+                var goal = playerComp.FindOpposingTeamGoal();
+                if (goal != null)
+                    playerComp.KickBall(goal.transform.position);
+                ChangeState(PlayerState.Idle);
                 break;
             case KickState.Pass:
+                var allyToPass = playerComp.FindClosestAlly();
+                if (allyToPass != null)
+                {
+                    playerComp.KickBall(allyToPass.transform.position, true);
+                    ChangeState(PlayerState.Idle);
+                }
                 break;
             case KickState.ToEnemy:
                 break;
@@ -214,6 +231,7 @@ public class PlayerStateMachineComponent : NetworkBehaviour
                 Destroy(gameObject);
                 break;
             case DeadState.Explode:
+                Destroy(gameObject);
                 break;
             default:
                 return;
@@ -222,6 +240,21 @@ public class PlayerStateMachineComponent : NetworkBehaviour
     public static T ParseEnum<T>(string value)
     {
         return (T)Enum.Parse(typeof(T), value, true);
+    }
+
+    public void ChangeState(PlayerState state)
+    {
+        if (isServer)
+        {
+            CurrentState = state;
+        }
+    }
+    public void ChangeState(IdleState state)
+    {
+        if (isServer)
+        {
+            CurrentIdleState = state;
+        }
     }
 
     #region EVENTS HANDLERS
@@ -233,14 +266,25 @@ public class PlayerStateMachineComponent : NetworkBehaviour
 
     public void onBallAware(GameObject _ballGO)
     {
-        if (BallAwareEvent != null)
-            BallAwareEvent.Invoke(_ballGO);
+        //if (BallAwareEvent != null)
+        //    BallAwareEvent.Invoke(_ballGO);
+        var ball = _ballGO.GetComponent<Ball>();
+        if(ball != null && isServer && CurrentState == PlayerState.Idle)
+        {
+            CurrentIdleState = IdleState.BallAware;
+            detectedBall = _ballGO;
+        }
     }
 
-    public void onPlayerAware(GameObject _player)
+    public void onEnemyAware(GameObject _player)
     {
-        if (EnemyAwareEvent != null)
-            EnemyAwareEvent.Invoke(_player);
+        //if (EnemyAwareEvent != null)
+        //    EnemyAwareEvent.Invoke(_player);
+        if (_player != null && isServer && CurrentState == PlayerState.Idle)
+        {
+            CurrentIdleState = IdleState.EnemyAware;
+            detectedEnemy = _player;
+        }
     }
 
     #endregion

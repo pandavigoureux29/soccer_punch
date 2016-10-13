@@ -30,6 +30,16 @@ public class PlayerBodyColliderComponent : NetworkBehaviour
                 player.ReversePatrolOrientation();
             }
         }
+        if (LayerMask.LayerToName(_coll.gameObject.layer) == "ball")
+        {
+            var ballComp = _coll.gameObject.GetComponent<Ball>();
+            if(ballComp != null && player != null && ballComp.GetOwner() == null)
+            {
+                ballComp.CatchBall(player);
+                //player.playerStateMachine.ChangeState(PlayerStateMachineComponent.PlayerState.Ball);
+                player.playerStateMachine.ChangeState(PlayerStateMachineComponent.PlayerState.Kick);
+            }
+        }
     }
 }
 
