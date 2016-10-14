@@ -50,7 +50,14 @@ public class GameManager : NetworkBehaviour {
         var players = FindObjectsOfType<PlayerComponent>();
         foreach(var player in players)
         {
-            player.playerStateMachine.ChangeState(PlayerStateMachineComponent.PlayerState.Dead);
+            if (player == null || player.playerStateMachine == null)
+            {
+
+            }
+            else
+            {
+                player.playerStateMachine.ChangeState(PlayerStateMachineComponent.PlayerState.Dead);
+            }
         }
 
         var ball = FindObjectOfType<Ball>();

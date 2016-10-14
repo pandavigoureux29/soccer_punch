@@ -165,7 +165,16 @@ public class PlayerStateMachineComponent : NetworkBehaviour
             case IdleState.EnemyAware:
                 playerComp.StopPatrol();
                 if (detectedEnemy != null)
-                    playerComp.RunTo(detectedEnemy.transform.position);
+                {
+                    if(Vector3.Distance(transform.position, detectedEnemy.transform.position) < 1f)
+                    {
+                        ChangeState(PlayerState.Enemy);
+                    }
+                    else
+                    {
+                        playerComp.RunTo(detectedEnemy.transform.position);
+                    }
+                }
                 break;
             default:
                 return;

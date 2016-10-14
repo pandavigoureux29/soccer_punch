@@ -22,7 +22,7 @@ public class PlayerAreaCollider : MonoBehaviour {
         }
         else if (LayerMask.LayerToName(_coll.gameObject.layer) == "player")
         {
-            var otherPlayerComp = _coll.GetComponent<PlayerComponent>();
+            var otherPlayerComp = _coll.transform.parent.gameObject.GetComponent<PlayerComponent>();
             if (otherPlayerComp != null && otherPlayerComp.IsMainTeam != player.IsMainTeam)
             {
                 var statemachine = player.GetComponent<PlayerStateMachineComponent>();
