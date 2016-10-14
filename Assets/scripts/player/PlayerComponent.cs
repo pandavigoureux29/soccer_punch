@@ -227,6 +227,7 @@ public class PlayerComponent : NetworkBehaviour {
                 return;
             var ballRB = ball.GetComponent<Rigidbody2D>();
             var movement = destination - ballRB.transform.position;
+            movement.Normalize();
             ballRB.AddForce(movement * PlayerData.KickSpeed);
             ballComp.Releaseball();
         }

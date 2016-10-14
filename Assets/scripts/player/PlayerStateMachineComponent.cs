@@ -50,7 +50,7 @@ public class PlayerStateMachineComponent : NetworkBehaviour
     {
         ToGoal = 0,
         Pass,
-        ToEnemy
+        Clear
     }
 
     public enum DeadState
@@ -234,7 +234,13 @@ public class PlayerStateMachineComponent : NetworkBehaviour
                     ChangeState(KickState.ToGoal);
                 }
                 break;
-            case KickState.ToEnemy:
+            case KickState.Clear:
+                var destination = playerComp.transform;
+                var deviation = UnityEngine.Random.Range(-45.0f, 45.0f);
+                destination.Rotate(new Vector3(0, 0, deviation));
+                destination.Translate(destination.forward);
+                playerComp.KickBall(destination.position);
+                ChangeState(PlayerState.Dead);
                 break;
             default:
                 return;

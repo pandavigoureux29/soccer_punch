@@ -59,7 +59,7 @@ public class PlayerGenerator : MonoBehaviour {
         for(int i=0; i < transform.childCount; i++)
         {
             var dragg = transform.GetChild(i).GetComponent<UIDraggablePlayer>();
-            if (dragg.IsEmpty)
+            if (dragg != null && dragg.IsEmpty)
             {
                 dragg.PlayerId = playerCount;
                 playerCount++;
