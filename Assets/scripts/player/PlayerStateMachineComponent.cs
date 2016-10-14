@@ -235,11 +235,12 @@ public class PlayerStateMachineComponent : NetworkBehaviour
                 }
                 break;
             case KickState.Clear:
-                var destination = playerComp.transform;
+                var destinationPos = playerComp.transform.position;
+
                 var deviation = UnityEngine.Random.Range(-45.0f, 45.0f);
-                destination.Rotate(new Vector3(0, 0, deviation));
-                destination.Translate(destination.forward);
-                playerComp.KickBall(destination.position);
+                var deviation2 = UnityEngine.Random.Range(-45.0f, 45.0f);
+                destinationPos += new Vector3(deviation, deviation2, 0);
+                playerComp.KickBall(destinationPos);
                 ChangeState(PlayerState.Dead);
                 break;
             default:
