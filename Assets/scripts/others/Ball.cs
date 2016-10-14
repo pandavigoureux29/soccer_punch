@@ -17,13 +17,6 @@ public class Ball : NetworkBehaviour
         OwnerId = -1;
     }
 
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        if( !isServer )
-            Destroy(GetComponent<Rigidbody2D>());
-    }
-
     // Update is called once per frame
     void Update () {
         if (OwnerId != -1)
